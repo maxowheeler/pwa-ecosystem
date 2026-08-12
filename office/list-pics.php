@@ -9,6 +9,7 @@
 // workflow. No archiving/versioning needed for these, they're just assets.
 //
 // Returns: { "files": ["lunch.png", "focus.png", ...] } — sorted, .png only.
+// Test of github deploy feature 8/11/26
 
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');

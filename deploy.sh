@@ -262,10 +262,33 @@ for file in "${deployable[@]}"; do
       byos_changed=true
     fi
   else
-    err "Deploy failed: $file"
+err "Deploy failed: $file"
     (( deploy_errors++ ))
   fi
 done
+
+# ── Git commit + push (best-effort — mirrors sync.js philosophy) ───
+# Runs only after local deploy succeeds. If this fails (no internet,
+# expired auth, GitHub down), the deploy itself is already done and
+# unaffected — this just keeps GitHub as a history/mirror.
+if [ ${#deployable[@]} -gt 0 ] && [ $deploy_errors -eq 0 ]; then
+  echo ""
+  echo "  Pushing to GitHub"
+  echo "  ──────────────────────────────────────"
+
+  ( cd "$PI_MOUNT/apps" && git add -A && \
+    if git diff --cached --quiet; then
+      echo "  ⚠ No changes to commit"
+    else
+      git commit -m "Deploy $TODAY: ${deployable[*]}" > /dev/null && \
+      if git push origin main; then
+        echo "  ✓ Pushed to GitHub"
+      else
+        echo "  ✗ GitHub push failed — deploy succeeded locally, push manually later"
+      fi
+    fi
+  )
+fi
 
 # ── Office BYOS → Cloud Run ─────────────────────────────────────────
 # Only runs if something under office-byos actually changed this pass,
