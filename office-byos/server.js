@@ -367,22 +367,54 @@ async function getTodayEvents() {
 }
 
 // ── Render the current status as a PNG buffer ─────────────────────
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+// Pure line-splitting, no drawing — shared by wrapText (draw immediately)
+// and drawFittedTitle (measure at several sizes before committing to one).
+function computeWrappedLines(ctx, text, maxWidth) {
   const words = String(text).split(' ');
+  const lines = [];
   let line = '';
-  let curY = y;
   for (const word of words) {
     const test = line ? `${line} ${word}` : word;
     if (ctx.measureText(test).width > maxWidth && line) {
-      ctx.fillText(line, x, curY);
+      lines.push(line);
       line = word;
-      curY += lineHeight;
     } else {
       line = test;
     }
   }
-  ctx.fillText(line, x, curY);
-  return curY;
+  lines.push(line);
+  return lines;
+}
+
+function drawWrappedLines(ctx, lines, x, y, lineHeight) {
+  let curY = y;
+  for (const line of lines) {
+    ctx.fillText(line, x, curY);
+    curY += lineHeight;
+  }
+  return curY - lineHeight;
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  return drawWrappedLines(ctx, computeWrappedLines(ctx, text, maxWidth), x, y, lineHeight);
+}
+
+// Picks the largest bold font size (down to minFontSize) at which `text`,
+// wrapped to maxWidth, fits within maxHeight — then draws it. Used for the
+// main status title so a long status shrinks instead of wrapping down past
+// its box into the row below.
+function drawFittedTitle(ctx, text, x, y, maxWidth, maxHeight, maxFontSize, minFontSize) {
+  let fontSize = maxFontSize;
+  let lines = [];
+  const lineHeightRatio = 0.13 / 0.12; // preserves the original font-size:line-height ratio
+  for (; fontSize > minFontSize; fontSize -= 2) {
+    ctx.font = `bold ${Math.floor(fontSize)}px "DejaVu Sans"`;
+    lines = computeWrappedLines(ctx, text, maxWidth);
+    if (lines.length * (fontSize * lineHeightRatio) <= maxHeight) break;
+  }
+  ctx.font = `bold ${Math.floor(fontSize)}px "DejaVu Sans"`;
+  lines = computeWrappedLines(ctx, text, maxWidth); // re-measure at the size we settled on
+  drawWrappedLines(ctx, lines, x, y, fontSize * lineHeightRatio);
 }
 
 // True when the pushed status has a backAtISO timestamp in the past.
@@ -415,14 +447,18 @@ async function renderStatusPng(status, calendar, width, height) {
   const usingOutlookFallback = (status.statusText || 'Available') === 'Available' && !!calendar.current;
 
   // ── Battery indicator — reserve corner space before title wraps ──
-  ctx.font = `${Math.floor(height * 0.032)}px "DejaVu Sans"`;
+  // Font size matches the footer row ("Screen updated at...") so the icon's
+  // height lines up with that text instead of looking oversized next to it;
+  // icon dimensions scale down proportionally with it.
+  const battFontSize = height * 0.028;
+  ctx.font = `${Math.floor(battFontSize)}px "DejaVu Sans"`;
   let batteryReserved = 0;
   let battW = 0, battH = 0, nubW = 0, battGap = 0, battLabel = '';
   if (lastBattery.percent !== null) {
-    battW   = Math.round(36 * scale);
-    battH   = Math.round(16 * scale);
-    nubW    = Math.round(4 * scale);
-    battGap = Math.round(6 * scale);
+    battH   = Math.round(battFontSize * 0.9);
+    battW   = Math.round(battH * 2.25); // preserve original 36:16 icon proportions
+    nubW    = Math.max(1, Math.round(battH * 0.25));
+    battGap = Math.round(battH * 0.375);
     battLabel = `${lastBattery.percent}%`;
     const labelW = ctx.measureText(battLabel).width;
     batteryReserved = battW + nubW + battGap + labelW + battGap;
@@ -436,22 +472,43 @@ async function renderStatusPng(status, calendar, width, height) {
     drawArtPlaceholder(ctx, status.icon || 'default', margin, margin, artSize);
   }
 
+  // ── Second-row metrics ("Status expiring at...") ────────────────
+  // Computed before the title so the title can size itself to the space
+  // above this row. colY is derived from the art board's actual bottom
+  // edge (margin + artSize) rather than a fixed fraction of it, so this
+  // row consistently sits near the bottom of that area instead of
+  // floating high above it regardless of scale.
+  const rowFontSize = height * 0.042;
+  const rowLineHeight = height * 0.06;
+  const rowBottomPad = rowFontSize * 0.2;
+  const colY = margin + artSize - rowLineHeight - rowFontSize * 0.32 - rowBottomPad;
+
   // ── Title ─────────────────────────────────────────────────────
   const textX = margin + artSize + margin;
   const textW = width - textX - margin - batteryReserved;
   const displayTitle = usingOutlookFallback
     ? `Outlook: ${calendar.current.summary}`
     : (status.statusText || 'Available');
-  ctx.font = `bold ${Math.floor(height * 0.12)}px "DejaVu Sans"`;
-  wrapText(ctx, displayTitle, textX, margin + height * 0.09, textW, height * 0.13);
+
+  // Push the title's top down below the battery indicator's own height so
+  // a tall/bold first line can never visually overlap it, regardless of
+  // status text length.
+  const battShift = lastBattery.percent !== null ? battH + battGap : 0;
+  const titleTop = margin + height * 0.09 + battShift;
+
+  // "Shrink to fit": start at the normal title size and step down until
+  // the wrapped text fits above the row below (colY) instead of wrapping
+  // down into or past it. Never shrinks below titleMinFont — a truly
+  // enormous status still wraps/clips there rather than becoming unreadable.
+  const titleMaxFont = height * 0.12;
+  const titleMinFont = height * 0.06;
+  const titleMaxHeight = colY - titleTop - height * 0.02;
+  drawFittedTitle(ctx, displayTitle, textX, titleTop, textW, titleMaxHeight, titleMaxFont, titleMinFont);
 
   // ── Second row beneath the title ────────────────────────────────
   // Manual-push mode: "Status expiring/expired at X" + "Status pushed at Y",
   // inverted to black-on-white once actually expired.
   // Outlook-fallback mode: just the event's end time, same visual slot.
-  const colY = margin + artSize * 0.72;
-  const rowFontSize = height * 0.042;
-  const rowLineHeight = height * 0.06;
 
   if (!usingOutlookFallback) {
     const expired = isStatusExpired(status);
@@ -484,7 +541,7 @@ async function renderStatusPng(status, calendar, width, height) {
     const battY = margin;
     // measureText needs the right font active — restore it, since title/
     // row drawing above changed ctx.font in between.
-    ctx.font = `${Math.floor(height * 0.032)}px "DejaVu Sans"`;
+    ctx.font = `${Math.floor(battFontSize)}px "DejaVu Sans"`;
     const labelW = ctx.measureText(battLabel).width;
     const battX = width - margin - nubW - battW - battGap - labelW;
 
