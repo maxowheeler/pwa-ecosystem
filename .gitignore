@@ -1,3 +1,6 @@
 data/
 shared/backups/
 .DS_Store
+
+._*
+

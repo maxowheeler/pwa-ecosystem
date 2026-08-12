@@ -470,3 +470,11 @@
   — No old archives to prune
   — 32 archive(s) retained in /mnt/warehouse/backups/data
   Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-12 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-12_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.

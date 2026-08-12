@@ -590,11 +590,13 @@ function pushOutForDay() {
   _backAtISO  = date.toISOString();
   _backAtDisp = formatBackAt(date);
   renderBackAt();
-  pushStatus();
+  // Fixed art for this canned status — 'out' maps to office-byos/assets/out.png
+  // server-side, independent of whatever's currently picked in the image library.
+  pushStatus({ iconOverride: 'out' });
 }
 
 // ── Push ──────────────────────────────────────────────────────────
-async function pushStatus() {
+async function pushStatus({ iconOverride } = {}) {
   if (!_settings.serverUrl || !_settings.pushSecret) {
     UI.toast('Add your BYOS server URL and push secret in settings first', 'error');
     openSettings();
@@ -606,8 +608,11 @@ async function pushStatus() {
 
   const payload = {
     statusText,
-    icon:       _selectedImage ? _selectedImage.id : '',
-    iconImage:  _selectedImage ? _selectedImage.base64 : null,
+    // iconOverride (e.g. from a canned status like Out-for-day) wins over
+    // whatever's selected in the image library, and never sends pushed
+    // image bytes — the override refers to a fixed office-byos/assets/*.png.
+    icon:       iconOverride || (_selectedImage ? _selectedImage.id : ''),
+    iconImage:  iconOverride ? null : (_selectedImage ? _selectedImage.base64 : null),
     backAt:     _backAtDisp || '',
     backAtISO:  _backAtISO || null,
     pushedAt:   pushedAtDisp,

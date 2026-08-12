@@ -248,6 +248,20 @@ async function loadArtImageForStatus(status) {
   return loadArtImage(status.icon);
 }
 
+// Fits `img` inside a `size`×`size` box at (x, y) without distorting its
+// aspect ratio — the long side is scaled to `size`, the short side is
+// scaled proportionally and centered, leaving even white padding on
+// whichever axis is shorter. Replaces a plain drawImage(img, x, y, size,
+// size), which stretched non-square source art.
+function drawImageContained(ctx, img, x, y, size) {
+  const scale = Math.min(size / img.width, size / img.height);
+  const w = img.width * scale;
+  const h = img.height * scale;
+  const dx = x + (size - w) / 2;
+  const dy = y + (size - h) / 2;
+  ctx.drawImage(img, dx, dy, w, h);
+}
+
 function drawArtPlaceholder(ctx, key, x, y, size) {
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(x, y, size, size);
@@ -417,7 +431,7 @@ async function renderStatusPng(status, calendar, width, height) {
   // ── Art board ─────────────────────────────────────────────────
   const artImg = await loadArtImageForStatus(status);
   if (artImg) {
-    ctx.drawImage(artImg, margin, margin, artSize, artSize);
+    drawImageContained(ctx, artImg, margin, margin, artSize);
   } else {
     drawArtPlaceholder(ctx, status.icon || 'default', margin, margin, artSize);
   }
