@@ -1,0 +1,351 @@
+/* journal.css — Journal app styles
+   Imports theme.css for the design system.
+   Only journal-specific components live here. */
+
+/* ── Compose Box ─────────────────────────────────────────────────── */
+.compose {
+  border-radius: 6px;
+  margin-bottom: 32px;
+  position: relative;
+  padding: 1px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+
+.compose.foam-mode {
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+}
+
+.compose-inner {
+  background: var(--surface);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.compose-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface-2);
+  gap: 12px;
+}
+
+.compose-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.title-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; /* 16px minimum — prevents iOS zoom on focus */
+  letter-spacing: 0.05em;
+  text-align: right;
+  width: 100%;
+  min-width: 0;
+  transition: color 0.2s;
+}
+
+.title-input::placeholder { color: var(--border); }
+.title-input:focus        { color: var(--text); }
+.title-input:focus::placeholder { color: var(--text-muted); }
+
+.compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--surface-2);
+  gap: 12px;
+}
+
+.compose-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Journal / Foam Toggle ───────────────────────────────────────── */
+.toggle-wrap {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+  user-select: none;
+  padding: 1px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+
+.toggle-wrap.foam-mode {
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+}
+
+.toggle-inner {
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.toggle-opt {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  color: var(--text-muted);
+  background: var(--surface-2);
+}
+
+.toggle-opt.active-journal { background: var(--accent-dim);            color: var(--accent); }
+.toggle-opt.active-foam    { background: rgba(160, 100, 255, 0.15);    color: #c4b5fd; }
+
+.toggle-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Followup Checkbox ───────────────────────────────────────────── */
+.followup-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  user-select: none;
+  transition: color 0.18s;
+}
+
+.followup-label:hover { color: var(--followup); }
+
+.followup-label input[type="checkbox"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.18s, background 0.18s;
+  flex-shrink: 0;
+}
+
+.followup-label input[type="checkbox"]:checked {
+  background: var(--followup-dim);
+  border-color: var(--followup);
+}
+
+.followup-label input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  font-size: 10px;
+  color: var(--followup);
+}
+
+/* ── Entry Cards ─────────────────────────────────────────────────── */
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* increased from 2px for breathing room */
+}
+
+.entry {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* Journal entry header */
+.entry-journal .entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.entry-journal .entry-body { background: var(--surface); }
+
+/* Foam entry header */
+.entry-foam .entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #111;
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+}
+
+.entry-foam .entry-body { background: #1d1d1d; }
+
+/* Shared entry body */
+.entry-body {
+  padding: 16px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Header left/right layout */
+.entry-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.entry-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.entry-type-tag {
+  opacity: 0.45;
+  font-size: 10px;
+}
+
+.entry-title {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.entry-journal .entry-title { color: var(--accent); }
+.entry-foam    .entry-title { color: #111; }
+
+/* Followup badge on entries */
+.followup-badge {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--followup-dim);
+  color: var(--followup);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  transition: opacity 0.15s, text-decoration 0.15s;
+}
+
+.followup-badge:hover {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.entry-foam .followup-badge {
+  background: rgba(249, 115, 22, 0.25);
+  color: #7a3800;
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+/* ── Recent entries label ────────────────────────────────────────── */
+.entries-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* ── Save error banner ───────────────────────────────────────────── */
+.save-error {
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--followup);
+  margin-bottom: 12px;
+}
+
+/* ── Entry Actions Bar ───────────────────────────────────────────── */
+/* Standard (journal entries) */
+.entry-actions {
+  padding: 8px 16px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Foam entries — rainbow animation on actions bar */
+.entry-actions-foam {
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+  border-top: none;
+}
+
+/* Edit button — journal style */
+.entry-edit-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.entry-edit-btn:active { background: var(--surface); }
+
+/* Edit button — foam style (dark text to show on rainbow bg) */
+.entry-edit-btn-foam {
+  border-color: rgba(0,0,0,0.2);
+  color: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.08);
+}
+
+.entry-edit-btn-foam:active { background: rgba(0,0,0,0.18); }

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bike Log">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Bike Log</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="../shared/icons/bike-icon-192.png">
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="bike.css">
+</head>
+<body>
+
+  <!-- ── Two-Row Sticky Header ────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="app-header-row1">
+      <button class="app-name-btn" id="btn-devlog">Bike Log</button>
+      <div class="app-header-right">
+        <span class="app-header-date" id="header-date"></span>
+        <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
+      </div>
+    </div>
+    <div class="app-header-row2">
+      <div class="sync-row" id="sync-row"></div>
+    </div>
+  </header>
+
+  <!-- ── Home Screen ──────────────────────────────────────────────── -->
+  <div class="screen active" id="screen-home">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val accent" id="stat-rides">0</div>
+        <div class="stat-lbl">Rides</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-miles">0</div>
+        <div class="stat-lbl">Miles</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-gas">$0</div>
+        <div class="stat-lbl">Gas saved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val accent" id="stat-total">$0</div>
+        <div class="stat-lbl">Total saved</div>
+      </div>
+    </div>
+
+    <!-- Break-even -->
+    <div class="be-card">
+      <div class="be-top">
+        <span class="be-label">Break-even progress</span>
+        <span class="be-pct" id="be-pct">0%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="be-bar" style="width:0%"></div>
+      </div>
+      <div class="be-sub" id="be-sub">—</div>
+    </div>
+
+    <!-- Savings Sparkline -->
+    <div class="spark-card">
+      <div class="spark-top">
+        <span class="be-label">Savings Over Time</span>
+      </div>
+      <div class="spark-wrap">
+        <svg id="spark-svg" class="spark-svg" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <!-- History nav -->
+    <div class="history-nav" id="btn-history">
+      <div>
+        <div class="hn-title">Ride History</div>
+        <div class="hn-sub" id="hist-sub">0 rides logged</div>
+      </div>
+      <div style="color:var(--text-muted);font-size:16px">›</div>
+    </div>
+
+  </div>
+
+  <!-- ── History Screen ───────────────────────────────────────────── -->
+  <div class="screen" id="screen-history">
+    <div class="topbar">
+      <button class="back-btn" id="btn-back-history">‹ Back</button>
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted)">History</div>
+      <div style="width:60px"></div>
+    </div>
+    <div id="history-list">
+      <div class="empty">No rides logged yet.</div>
+    </div>
+  </div>
+
+  <!-- ── Footer ──────────────────────────────────────────────────── -->
+  <footer class="app-footer" id="app-footer">
+    <button class="footer-btn footer-btn-primary" id="btn-log-commute">🚲 Log Commute</button>
+    <button class="footer-btn" id="btn-log-other">＋ Log Other</button>
+  </footer>
+
+  <!-- ── Modal: Log / Edit Ride ───────────────────────────────────── -->
+  <div class="modal-wrap" id="modal-ride">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header plain" id="modal-ride-header">
+        <span class="modal-title" id="modal-ride-title">Log Ride</span>
+        <button class="modal-close" id="modal-ride-close">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- When -->
+        <div class="section-label">When</div>
+        <div class="field-row3">
+          <div class="field">
+            <label class="field-label">Date</label>
+            <input type="date" id="r-date">
+          </div>
+          <div class="field">
+            <label class="field-label">End Time</label>
+            <input type="time" id="r-endtime">
+          </div>
+          <div class="field">
+            <label class="field-label">Leg</label>
+            <select id="r-leg">
+              <option>Morning</option>
+              <option>Evening</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Duration -->
+        <div class="field">
+          <label class="field-label">Duration</label>
+          <div class="dur-wheel-wrap">
+            <div class="dur-center-line"></div>
+            <div class="dur-wheel" id="dur-wheel"></div>
+          </div>
+          <div class="dur-display">Selected: <span id="dur-display">30</span> min</div>
+        </div>
+
+        <!-- Miles + Route -->
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">One-way miles</label>
+            <input type="number" id="r-miles" step="0.1" min="0">
+          </div>
+          <div class="field">
+            <label class="field-label">Route</label>
+            <input type="text" id="r-route" placeholder="e.g. River path" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Weather -->
+        <div class="section-label">Weather</div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Temp</label>
+            <input type="text" id="r-temp" placeholder="68°F">
+          </div>
+          <div class="field">
+            <label class="field-label">Conditions</label>
+            <input type="text" id="r-conditions" placeholder="Partly cloudy">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Wind</label>
+          <div class="wind-row">
+            <input type="text" id="r-wind" placeholder="8 mph NW">
+            <div class="wind-arrow-box">
+              <span class="wind-arrow" id="wind-arrow">↑</span>
+            </div>
+            <button class="fetch-btn" id="btn-fetch-weather">Fetch</button>
+          </div>
+        </div>
+        <div class="weather-status" id="weather-status"></div>
+
+        <!-- Gas -->
+        <div class="field">
+          <label class="field-label">Gas ($/gal)</label>
+          <input type="number" id="r-gas" step="0.001">
+        </div>
+
+        <!-- Clothing -->
+        <div class="section-label">Clothing</div>
+        <div class="clothing-section">
+          <div class="clothing-row">
+            <div class="clothing-emoji">⛑️</div>
+            <div class="ac-wrap">
+              <input class="clothing-input" type="text" id="c-helmet" placeholder="Helmet / head" autocomplete="off">
+              <div class="ac-list" id="ac-helmet"></div>
+            </div>
+          </div>
+          <div class="clothing-row">
+            <div class="clothing-emoji">🧥</div>
+            <div class="ac-wrap">
+              <input class="clothing-input" type="text" id="c-coat" placeholder="Coat / jacket" autocomplete="off">
+              <div class="ac-list" id="ac-coat"></div>
+            </div>
+          </div>
+          <div class="clothing-row">
+            <div class="clothing-emoji">👕</div>
+            <div class="ac-wrap">
+              <input class="clothing-input" type="text" id="c-shirt" placeholder="Top layer" autocomplete="off">
+              <div class="ac-list" id="ac-shirt"></div>
+            </div>
+          </div>
+          <div class="clothing-row">
+            <div class="clothing-emoji">👖</div>
+            <div class="ac-wrap">
+              <input class="clothing-input" type="text" id="c-pants" placeholder="Bottom layer" autocomplete="off">
+              <div class="ac-list" id="ac-pants"></div>
+            </div>
+          </div>
+          <div class="clothing-row">
+            <div class="clothing-emoji">👟</div>
+            <div class="ac-wrap">
+              <input class="clothing-input" type="text" id="c-shoes" placeholder="Shoes" autocomplete="off">
+              <div class="ac-list" id="ac-shoes"></div>
+            </div>
+          </div>
+          <div class="clothing-row">
+            <div class="clothing-emoji">🧤</div>
+            <div class="ac-wrap">
+              <input class="clothing-input" type="text" id="c-gloves" placeholder="Gloves / accessories" autocomplete="off">
+              <div class="ac-list" id="ac-gloves"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rain gear + Backpack toggles -->
+        <div class="toggle-row">
+          <span class="toggle-label">🌧️ Rain gear used</span>
+          <div class="toggle" id="rain-toggle"></div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">🎒 Backpack</span>
+          <div class="toggle" id="backpack-toggle"></div>
+        </div>
+
+        <!-- E-Bike -->
+        <div class="section-label">E-Bike</div>
+        <div class="field-row3">
+          <div class="field">
+            <label class="field-label">Class</label>
+            <select id="r-ebike-class">
+              <option value="">—</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>Custom</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Mode</label>
+            <select id="r-mode">
+              <option value="">—</option>
+              <option>Eco</option>
+              <option>Trail</option>
+              <option>Sport</option>
+              <option>Boost</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Loading</label>
+            <select id="r-loading">
+              <option value="">—</option>
+              <option>None</option>
+              <option>Loaded</option>
+              <option>Encumbered</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Battery % consumed</label>
+          <input type="number" id="r-battery" min="0" max="100" step="1" placeholder="e.g. 25">
+        </div>
+
+        <!-- Exertion -->
+        <div class="section-label">Exertion</div>
+        <div class="exertion-scale">
+          <div class="exertion-opt" data-val="Easy"><span class="ee">🟢</span>Easy</div>
+          <div class="exertion-opt" data-val="Medium"><span class="ee">🟡</span>Medium</div>
+          <div class="exertion-opt" data-val="Hard"><span class="ee">🔴</span>Hard</div>
+        </div>
+
+        <!-- Comfort -->
+        <div class="section-label">How was it?</div>
+        <div class="comfort-scale">
+          <div class="comfort-opt" data-val="Freezing"><span class="ce">🥶</span>Freezing</div>
+          <div class="comfort-opt" data-val="Cold"><span class="ce">😬</span>Cold</div>
+          <div class="comfort-opt" data-val="Good"><span class="ce">😊</span>Good</div>
+          <div class="comfort-opt" data-val="Hot"><span class="ce">😓</span>Hot</div>
+          <div class="comfort-opt" data-val="Burning"><span class="ce">🥵</span>Burning</div>
+        </div>
+
+        <!-- Notes -->
+        <div class="field">
+          <label class="field-label">Notes</label>
+          <textarea id="r-notes" placeholder="Anything worth remembering..."></textarea>
+        </div>
+
+        <button class="footer-btn footer-btn-primary" style="width:100%;margin-top:4px;" id="btn-save-ride">Save Entry</button>
+        <!-- Delete button — only visible in edit mode -->
+        <button class="del-ride-btn" style="width:100%;margin-top:8px;display:none;" id="btn-delete-ride">Delete Entry</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal: Settings ──────────────────────────────────────────── -->
+  <div class="modal-wrap" id="modal-settings">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header plain">
+        <span class="modal-title">Settings</span>
+        <button class="modal-close" id="modal-settings-close">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="settings-group">
+          <span class="settings-group-label">Investment</span>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Bike cost ($)</label>
+              <input type="number" id="s-cost" step="0.01">
+            </div>
+            <div class="field">
+              <label class="field-label">Parking / mo ($)</label>
+              <input type="number" id="s-parking" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <span class="settings-group-label">Commute defaults</span>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">One-way miles</label>
+              <input type="number" id="s-miles" step="0.1">
+            </div>
+            <div class="field">
+              <label class="field-label">Car MPG</label>
+              <input type="number" id="s-mpg" step="0.1">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Default gas ($/gal)</label>
+            <input type="number" id="s-gas" step="0.001">
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <span class="settings-group-label">Weather</span>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">ZIP code</label>
+              <input type="text" id="s-zip">
+            </div>
+            <div class="field">
+              <label class="field-label">OWM API key</label>
+              <input type="text" id="s-owm" placeholder="Paste key here">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <span class="settings-group-label">Sync</span>
+          <div class="field">
+            <label class="field-label">Pi IP</label>
+            <input type="text" id="s-pi" placeholder="192.168.1.216">
+          </div>
+        </div>
+
+        <button class="btn" style="width:100%;margin-top:4px;" id="btn-save-settings">Save Settings</button>
+
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="bike.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>

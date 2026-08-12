@@ -1,0 +1,515 @@
+/* theme.css v1.2.0 — Shared design system for the PWA ecosystem
+   Tron Legacy terminal aesthetic: dark, monospaced, warm gold accent.
+   "Dusty around the edges, crystal clear where it matters."
+   All apps import this. Never redefine these variables in app CSS. */
+
+/* ── Google Font ─────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+/* ── Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Color Tokens ────────────────────────────────────────────────── */
+:root {
+  /* Surfaces — layered dark, like depth in a CRT */
+  --bg:          #1a1a1a;
+  --surface:     #222222;
+  --surface-2:   #2a2a2a;
+
+  /* Borders — barely visible, structural only */
+  --border:      #333333;
+  --border-soft: #2e2e2e;
+
+  /* Text — slightly warm white, never pure #fff */
+  --text:        #e8e8e8;
+  --text-muted:  #777777;
+
+  /* Accent — warm terminal gold */
+  --accent:      #c9a96e;
+  --accent-dim:  rgba(201, 169, 110, 0.12);
+
+  /* Followup / alert — ember orange */
+  --followup:     #f97316;
+  --followup-dim: rgba(249, 115, 22, 0.12);
+
+  /* Foam — rainbow animation, defined as gradient below */
+  --foam-gradient: linear-gradient(135deg,
+    #ff6b6b, #ff9f43, #ffd93d, #6bff8e,
+    #48dbfb, #54a0ff, #5f6cff, #a29bfe,
+    #e056fd, #ff6b9d, #ff6b6b);
+
+  /* Header height — used to offset body padding so content clears sticky header */
+  --header-height: 72px;
+
+  /* Footer height — used to offset body padding so content clears sticky footer */
+  --footer-height: 80px;
+}
+
+/* ── Base ────────────────────────────────────────────────────────── */
+html, body { height: 100%; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Offset for sticky header + safe area inset + sticky footer */
+  padding: calc(var(--header-height) + env(safe-area-inset-top) + 16px) 20px calc(var(--footer-height) + env(safe-area-inset-bottom));
+  -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+  width: 100%;
+  max-width: 720px;
+  position: relative;
+}
+
+/* ── Typography ──────────────────────────────────────────────────── */
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.label-accent { color: var(--accent); }
+
+.meta {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+/* ── App Header — Two-Row Sticky ─────────────────────────────────── */
+/* Standard header used by all apps. Stays fixed while scrolling.
+   Row 1: App name button (devlog) | Date + gear icon (settings)
+   Row 2: Sync pill right-aligned
+   
+   Required HTML structure:
+   <header class="app-header">
+     <div class="app-header-row1">
+       <button class="app-name-btn" id="btn-devlog">AppName</button>
+       <div class="app-header-right">
+         <span class="app-header-date" id="header-date"></span>
+         <button class="icon-btn" id="btn-settings">⚙</button>
+       </div>
+     </div>
+     <div class="app-header-row2">
+       <div class="sync-row" id="sync-row"></div>
+     </div>
+   </header>                                                          */
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: calc(env(safe-area-inset-top) + 10px) 20px 8px;
+}
+
+.app-header-row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.app-header-row2 {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* App name — devlog trigger */
+.app-name-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.app-name-btn:active { opacity: 0.6; }
+
+/* Right cluster — date + gear */
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-header-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* Sync row inside header — suppress default bottom margin */
+.app-header .sync-row { margin-bottom: 0; }
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.btn {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  border-radius: 4px;
+  padding: 7px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn:hover {
+  background: rgba(201, 169, 110, 0.22);
+  border-color: rgba(201, 169, 110, 0.6);
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  color: var(--accent);
+  border-color: rgba(201, 169, 110, 0.4);
+  background: var(--accent-dim);
+}
+
+.filter-btn {
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.filter-btn:hover           { color: var(--text); border-color: #555; }
+.filter-btn.active          { background: var(--accent-dim); color: var(--accent); border-color: rgba(201,169,110,0.3); }
+.filter-btn.active-followup { background: var(--followup-dim); color: var(--followup); border-color: rgba(249,115,22,0.3); }
+
+.filter-count {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────── */
+.card {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.card-body {
+  padding: 16px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── Form Elements ───────────────────────────────────────────────── */
+textarea, input[type="text"] {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; /* 16px minimum — prevents iOS zoom on focus */
+  line-height: 1.75;
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+  display: block;
+  padding: 16px;
+  min-height: 80px;
+}
+
+textarea::placeholder,
+input[type="text"]::placeholder { color: var(--text-muted); }
+
+/* ── Badges ──────────────────────────────────────────────────────── */
+.badge {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.badge-followup {
+  background: var(--followup-dim);
+  color: var(--followup);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+/* ── Sync Pill ───────────────────────────────────────────────────── */
+.sync-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.sync-dot       { width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+.sync-dot.ok    { background: #5ecf8a; }
+.sync-dot.fail  { background: #e05c5c; }
+
+/* ── Icon Buttons ────────────────────────────────────────────────── */
+.icon-btn {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: 4px;
+  width: 32px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.icon-btn:active { background: rgba(201,169,110,0.22); }
+
+/* ── App Footer — Sticky Bottom Navigation ───────────────────────── */
+/* Shared footer for all apps. Stays fixed at bottom of viewport.
+   Holds navigation and primary action buttons.
+   Up to 2 buttons per row; single button spans full width.
+   Modals render above this via z-index.
+
+   Required HTML structure:
+   <footer class="app-footer">
+     <button class="footer-btn footer-btn-primary">🚲 Log Commute</button>
+     <button class="footer-btn">＋ Log Other</button>
+   </footer>
+
+   For navigation links use <a class="footer-btn"> instead of <button>.  */
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px calc(env(safe-area-inset-bottom) + 12px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.app-footer.hidden { display: none; }
+
+/* Default footer button — accent gold style */
+.footer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid rgba(201,169,110,0.3);
+  background: var(--accent-dim);
+  color: var(--accent);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.footer-btn:active { background: rgba(201,169,110,0.22); }
+
+/* Primary footer button — rainbow gradient (for main actions) */
+.footer-btn-primary {
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+  color: #111;
+  border: none;
+}
+
+.footer-btn-primary:active { opacity: 0.85; }
+
+/* ── Toast / Overlay ─────────────────────────────────────────────── */
+.toast {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.toast.visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.toast-close {
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 4px;
+  transition: color 0.15s;
+}
+
+.toast-close:hover { color: var(--text); }
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  display: none;
+}
+
+.backdrop.visible { display: block; }
+
+.backdrop-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+
+.backdrop-dim.visible { display: block; }
+
+/* ── Foam / Rainbow Animation ────────────────────────────────────── */
+@keyframes rainbowDrift {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes foamIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -54%) scale(1); }
+}
+
+.foam-bg {
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+}
+
+.foam-border {
+  background-image: var(--foam-gradient);
+  background-size: 400% 400%;
+  animation: rainbowDrift 8s ease-in-out infinite;
+  padding: 1px;
+  border-radius: 6px;
+}
+
+/* ── Utility ─────────────────────────────────────────────────────── */
+.hidden  { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+.empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 32px 0;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.entries-total {
+  margin-left: auto;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

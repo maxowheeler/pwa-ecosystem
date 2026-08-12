@@ -1,0 +1,17 @@
+{
+  "name": "office-status-byos",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.0",
+    "node-ical": "^0.18.0"
+  }
+}

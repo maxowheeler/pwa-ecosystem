@@ -1,0 +1,249 @@
+/* office.css — Office Status app styles
+   Imports theme.css for the design system.
+   Only office-specific components live here. */
+
+/* ── Compose Card ─────────────────────────────────────────────────── */
+.compose-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+/* ── Canned Status Buttons ───────────────────────────────────────── */
+.canned-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.canned-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.canned-btn:active { background: var(--accent-dim); border-color: rgba(201,169,110,0.4); }
+
+/* ── Status Text Input ───────────────────────────────────────────── */
+.status-input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  color: var(--text);
+}
+
+.status-input:focus { border-color: var(--accent); outline: none; }
+
+/* ── Image Picker — compose-form preview + Choose Image button ────── */
+.image-picker-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.image-preview-box {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-preview-empty {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* ── Image Picker Modal — sort bar + grid ─────────────────────────── */
+.image-picker-sortbar {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #2e2e2e;
+  flex-shrink: 0;
+}
+
+.image-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.image-picker-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.15s, opacity 0.15s;
+}
+
+.image-picker-cell:active { opacity: 0.7; border-color: rgba(201,169,110,0.5); }
+
+/* ── Back At Row ──────────────────────────────────────────────────── */
+.backat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.backat-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 9px 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.backat-btn:active { background: var(--accent-dim); color: var(--accent); }
+
+.backat-time {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 6px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; /* 16px minimum — prevents iOS zoom on focus */
+  width: 100px;
+}
+
+.backat-clear {
+  width: 34px;
+  height: 34px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.backat-display {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── History Entries ─────────────────────────────────────────────── */
+.history-entry { cursor: pointer; transition: background 0.15s; }
+.history-entry:active { background: var(--surface-2); }
+.history-entry .entry-header {
+  padding: 8px 16px;
+  background: var(--surface-2);
+  border-bottom: none;
+}
+.history-entry .entry-body {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+}
+
+.entry-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+
+/* ── Settings Modal ───────────────────────────────────────────────── */
+.settings-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-backdrop.open { display: flex; }
+
+.settings-modal {
+  width: min(360px, 90vw);
+  background: #222222;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #2e2e2e;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #777777;
+}
+
+.settings-close { cursor: pointer; font-size: 14px; padding: 2px 4px; }
+
+.settings-modal-body { padding: 16px; }
+
+.settings-input {
+  width: 100%;
+  background: #2a2a2a;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; /* 16px minimum — prevents iOS zoom on focus */
+  margin-top: 5px;
+}
+
+/* Long URLs (e.g. full Cloud Run service URLs) wrap onto a second line
+   instead of requiring horizontal drag-scroll inside a single-line input. */
+.settings-textarea {
+  resize: none;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.settings-hint {
+  font-size: 10px;
+  color: #666666;
+  line-height: 1.6;
+  margin-top: 8px;
+  letter-spacing: 0.03em;
+}

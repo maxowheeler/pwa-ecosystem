@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Office Status">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Office Status</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="../shared/icons/office-icon-192.png">
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="office.css">
+</head>
+<body>
+
+  <!-- ── Two-Row Sticky Header ────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="app-header-row1">
+      <button class="app-name-btn" id="btn-devlog">Office Status</button>
+      <div class="app-header-right">
+        <span class="app-header-date" id="header-date"></span>
+        <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
+      </div>
+    </div>
+    <div class="app-header-row2">
+      <!-- Not a Pi sync pill — tap opens Office's own push-history modal -->
+      <div class="sync-row" id="webhook-row"></div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ── Compose ──────────────────────────────────────────────── -->
+    <div class="entries-label">Update Status</div>
+    <div class="compose-card">
+
+      <div class="canned-grid">
+        <button class="canned-btn" data-label="At Lunch">🍔 At Lunch</button>
+        <button class="canned-btn" data-label="Side Quest">🎮 Side Quest</button>
+        <button class="canned-btn" data-label="Focus Mode">🎯 Focus Mode</button>
+        <button class="canned-btn" data-label="in DESIGN HUB">📍 in DESIGN HUB</button>
+      </div>
+
+      <input
+        type="text"
+        id="status-input"
+        class="status-input"
+        placeholder="Or type a custom status..."
+        maxlength="60"
+        autocomplete="off"
+      >
+
+      <div class="field-label" style="margin-top:14px;">Image</div>
+      <div class="image-picker-preview">
+        <div class="image-preview-box" id="image-preview-box">
+          <span class="image-preview-empty">No image</span>
+        </div>
+        <button class="btn" id="btn-choose-image">Choose Image</button>
+      </div>
+
+      <div class="field-label" style="margin-top:14px;">Back At</div>
+      <div class="backat-row">
+        <button class="backat-btn" data-min="15">+15m</button>
+        <button class="backat-btn" data-min="30">+30m</button>
+        <button class="backat-btn" data-min="45">+45m</button>
+        <input type="time" id="backat-time" class="backat-time">
+        <button class="backat-clear" id="btn-clear-backat" title="Clear back-at">✕</button>
+      </div>
+      <div class="backat-display" id="backat-display">No back-at time set</div>
+
+    </div>
+
+    <!-- ── Recent Pushes ────────────────────────────────────────── -->
+    <div class="entries-label" style="margin-top:24px;">Recent Pushes</div>
+    <div class="entries" id="history-list"></div>
+
+  </div>
+
+  <footer class="app-footer">
+    <button class="footer-btn" id="btn-im-back">✓ I'm Back</button>
+    <button class="footer-btn" id="btn-out-day">Out for the Day</button>
+    <button class="footer-btn footer-btn-primary" id="btn-push">📡 Push Update</button>
+  </footer>
+
+  <!-- ── Settings Modal ───────────────────────────────────────────── -->
+  <div class="settings-backdrop" id="settings-backdrop">
+    <div class="settings-modal">
+      <div class="settings-modal-header">
+        <span>Office Status Settings</span>
+        <span class="settings-close" id="btn-settings-close">✕</span>
+      </div>
+      <div class="settings-modal-body">
+        <label class="field-label">BYOS Server URL</label>
+        <textarea id="s-server-url" class="settings-input settings-textarea" rows="2" placeholder="https://office-status-byos-xxxxx-uc.a.run.app"></textarea>
+        <label class="field-label" style="margin-top:12px;">Push Secret</label>
+        <input type="text" id="s-push-secret" class="settings-input" placeholder="shared secret set on the server">
+        <div class="settings-hint">
+          These match the Cloud Run service URL and PUSH_SECRET<br>
+          environment variable from your BYOS deployment.
+        </div>
+        <button class="btn" style="width:100%;margin-top:14px;" id="btn-settings-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="office.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>

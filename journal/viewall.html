@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Journal — All Entries</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="../shared/icons/journal-icon-192.png">
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="journal.css">
+</head>
+<body>
+
+  <!-- ── Two-Row Sticky Header ────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="app-header-row1">
+      <button class="app-name-btn" id="btn-devlog">All Entries</button>
+      <div class="app-header-right">
+        <span class="app-header-date" id="header-date"></span>
+        <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
+      </div>
+    </div>
+    <div class="app-header-row2">
+      <div class="sync-row" id="sync-row"></div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ── Filter Bar ───────────────────────────────────────────── -->
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" id="filter-all"      onclick="setFilter('all')">All<span class="filter-count" id="count-all"></span></button>
+      <button class="filter-btn"        id="filter-journal"  onclick="setFilter('journal')">Journal<span class="filter-count" id="count-journal"></span></button>
+      <button class="filter-btn"        id="filter-foam"     onclick="setFilter('foam')">Foam<span class="filter-count" id="count-foam"></span></button>
+      <button class="filter-btn"        id="filter-followup" onclick="setFilter('followup')">Followup<span class="filter-count" id="count-followup"></span></button>
+      <span class="entries-total" id="visible-count"></span>
+    </div>
+
+    <!-- ── Entries ──────────────────────────────────────────────── -->
+    <div class="entries" id="entries-list"></div>
+
+  </div>
+
+  <script type="module" src="viewall.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/journal/sw.js');
+    }
+  </script>
+</body>
+</html>

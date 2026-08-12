@@ -1,0 +1,23 @@
+{
+  "name": "Bike Log",
+  "short_name": "Bike Log",
+  "description": "Bike commute tracker — local-first, offline-capable.",
+  "start_url": "/bike/index.html",
+  "scope": "/bike/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/shared/icons/bike-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/shared/icons/bike-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

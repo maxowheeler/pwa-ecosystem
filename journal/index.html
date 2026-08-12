@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Journal">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Journal</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="../shared/icons/journal-icon-192.png">
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="journal.css">
+</head>
+<body>
+
+  <!-- ── Two-Row Sticky Header ────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="app-header-row1">
+      <button class="app-name-btn" id="btn-devlog">Journal</button>
+      <div class="app-header-right">
+        <span class="app-header-date" id="header-date"></span>
+        <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
+      </div>
+    </div>
+    <div class="app-header-row2">
+      <div class="sync-row" id="sync-row"></div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ── Save error banner (shown only on failed save) ────────── -->
+    <div class="save-error hidden" id="save-error">
+      ⚠ Entry could not be saved — your text has been preserved. Please try again.
+    </div>
+
+    <!-- ── Compose Box ──────────────────────────────────────────── -->
+    <div class="compose" id="compose-box">
+      <div class="compose-inner">
+
+        <div class="compose-header">
+          <span class="compose-label">New Entry</span>
+          <input
+            type="text"
+            class="title-input"
+            id="entry-title"
+            placeholder="Title (optional)"
+            maxlength="80"
+            autocomplete="off"
+          >
+        </div>
+
+        <textarea
+          id="entry-text"
+          placeholder="Write something..."
+        ></textarea>
+
+        <div class="compose-footer">
+          <div class="compose-footer-left">
+
+            <!-- Journal / Foam toggle -->
+            <div class="toggle-wrap" id="toggle-wrap">
+              <div class="toggle-inner">
+                <div class="toggle-opt active-journal" id="toggle-journal" onclick="setType('Journal')">Journal</div>
+                <div class="toggle-divider"></div>
+                <div class="toggle-opt" id="toggle-foam" onclick="setType('Foam')">Foam</div>
+              </div>
+            </div>
+
+            <!-- Followup checkbox -->
+            <label class="followup-label">
+              <input type="checkbox" id="followup-check">
+              Followup
+            </label>
+
+          </div>
+          <button class="btn" id="save-btn" onclick="saveEntry()">Save Entry</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Recent Entries ───────────────────────────────────────── -->
+    <div class="entries-label">Recent Entries</div>
+    <div class="entries" id="entries-list"></div>
+
+  </div>
+
+  <footer class="app-footer">
+    <a href="viewall.html" class="footer-btn">☰ View All</a>
+    <a href="timeline.html" class="footer-btn">◷ Timeline</a>
+  </footer>
+
+  <script type="module" src="journal.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>

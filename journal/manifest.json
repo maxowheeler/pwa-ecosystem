@@ -1,0 +1,23 @@
+{
+  "name": "Journal",
+  "short_name": "Journal",
+  "description": "Personal journal — local-first, offline-capable.",
+  "start_url": "/journal/index.html",
+  "scope": "/journal/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/shared/icons/journal-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/shared/icons/journal-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
