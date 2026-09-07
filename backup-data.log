@@ -478,3 +478,211 @@
   ✓ Pruned 1 archive(s) older than 30 days
   — 32 archive(s) retained in /mnt/warehouse/backups/data
   Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-13 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-13_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-14 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-14_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-15 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-15_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-16 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-16_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-17 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-17_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-18 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-18_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-19 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-19_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-20 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-20_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-21 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-21_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-22 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-22_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-23 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-23_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-24 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-24_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-25 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-25_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-26 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-26_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-27 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-27_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-28 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-28_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-29 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-29_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-30 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-30_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-08-31 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-08-31_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-01 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-01_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-02 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-02_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-03 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-03_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-04 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-04_0400.tar.gz (136K)
+  — No old archives to prune
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-05 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-05_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-06 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-06_0400.tar.gz (136K)
+  ✓ Pruned 1 archive(s) older than 30 days
+  — 32 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
+
+──────────────────────────────────────
+  Data Backup — 2026-09-07 04:00
+──────────────────────────────────────
+  ✓ Archive created: data_2026-09-07_0400.tar.gz (136K)
+  ✓ Pruned 2 archive(s) older than 30 days
+  — 31 archive(s) retained in /mnt/warehouse/backups/data
+  Done.
